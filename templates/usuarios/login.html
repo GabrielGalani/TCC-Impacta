@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+</head>
+<body>
+    <div class="login-container">
+        <form action="{% url 'login' %}" method="POST" class="formLogin">
+            {% csrf_token %}
+            <h1>Login</h1>
+            <p>Digite os seus dados de acesso no campo abaixo.</p>
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success col-12" style="padding-top: 5px;">Entrar</button>
+            <div class="links">
+                <a href="{% url 'cadastro' %}">Cadastrar Usuário</a> |
+            </div>
+        </form>
+    </div>
+
+    <div id="popup" class="popup"></div>
+    {% include 'partials/_message.html' %}
+</body>
+</html>

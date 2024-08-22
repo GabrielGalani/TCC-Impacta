@@ -1,0 +1,25 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+{% block content %}
+<title> Cadastro de usuario </title>
+<header>
+    <h1>Cadastro de usuário</h1>
+    <nav class="nav-container">
+        <a href="{% url 'login' %}">Login</a> |
+    </nav>
+</header>
+<body>
+    <div class="login-cadastro-container">
+        <form method="post" class="formCadastroLogin">
+            {% csrf_token %}
+            <h1>Cadastrar acesso</h1>
+            <p>Preencha o formulário abaixo com seus dados</p>
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success col-12" style="padding-top: 5px;">Cadastrar</button>
+        </form>
+    </div>
+
+    <div id="popup" class="popup"></div>
+    {% include 'partials/_message.html' %}
+</body>
+{% endblock %}

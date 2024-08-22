@@ -1,0 +1,19 @@
+{% if messages %}
+<!-- Verifica se há mensagens a serem exibidas -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Aguarda o carregamento completo da página antes de executar o script
+        var popup = document.getElementById('popup');
+        {% for message in messages %}
+            // Itera sobre cada mensagem
+            popup.innerText = "{{ message }}";
+            popup.classList.add('show');
+            
+            // Define um temporizador para remover a classe 'show' após 3 segundos
+            setTimeout(function() {
+                popup.classList.remove('show');
+            }, 3000); // O popup desaparece após 3 segundos
+        {% endfor %}
+    });
+</script>
+{% endif %}

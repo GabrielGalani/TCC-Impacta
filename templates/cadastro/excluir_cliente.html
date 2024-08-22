@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Excluir Cliente</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <h1>Excluir Cliente</h1>
+    <!-- Mensagem confirmando a exclusão e exibindo o nome do cliente -->
+    <p>Tem certeza de que deseja excluir o cliente "{{ cliente.nome }}"?</p>
+    <!-- Formulário para confirmar a exclusão do cliente -->
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Confirmar Exclusão</button>
+        <a href="{% url 'home' %}">Cancelar</a>
+    </form>
+</body>
+</html>

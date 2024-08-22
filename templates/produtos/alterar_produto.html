@@ -1,0 +1,29 @@
+<!-- cadastro/templates/cadastro/alterar_cliente.html -->
+{% extends 'shared/base.html' %}
+{% load static %}
+{% block content %}
+<title> Alterar produtos </title>
+<header>
+    <!-- Navegação com links para outras páginas -->
+    <h1>Alterar produto</h1>
+    <nav class="nav-container">
+        <a href="{% url 'home' %}">Home</a> |
+        <a href="{% url 'listar_clientes' %}">Voltar para lista de produtos</a>
+    </nav>
+</header>
+<body>
+    <div class="cadastro-cliente-container">
+        <!-- Container para o formulário de cadastro/alteração de cliente -->
+        <form method="post" class="formCadastroCliente">
+            {% csrf_token %}
+            <h1>Alterar produto</h1>
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success col-12" style="padding-top: 5px;">Salvar alterações</button>
+        </form>
+    </div>
+
+    <!-- <a href="{% url 'listar_clientes' %}">Voltar para a lista de clientes</a> -->
+    <div id="popup" class="popup"></div>
+    {% include 'partials/_message.html' %}
+</body>
+{% endblock %}

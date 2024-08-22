@@ -1,0 +1,60 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+{% block content %}
+<title>Cadastro de Vendas</title>
+<header>
+    <!-- Cabeçalho da página de cadastro de vendas -->
+    <h1>Cadastrar Venda</h1>
+    <nav class="nav-container">
+        <!-- Navegação com links para a página inicial e para a lista de vendas -->
+        <a href="{% url 'home' %}">Home</a> |
+        <a href="{% url 'listar_vendas' %}">Listar Vendas</a>
+    </nav>
+</header>
+<body>
+    <!-- Formulário para cadastrar uma nova venda -->
+    <form method="post" id="venda-form">
+        <!-- Token CSRF para segurança em envios de formulário -->
+        {% csrf_token %}
+        <!-- Renderiza o formulário principal para a venda -->
+        {{ form.as_p }}
+
+        <!-- Tabela para listar os itens da venda -->
+        <table id="item-venda-table">
+            <thead>
+                <tr>
+                    <!-- Cabeçalhos das colunas da tabela de itens -->
+                    <th>Produto</th>
+                    <th>Quantidade</th>
+                    <th>Valor Unitário</th>
+                    <th>Valor Total</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="item-venda-tbody">
+                <!-- Itera sobre o formset e cria uma linha para cada item -->
+                {% for form in formset %}
+                <tr>
+                    <td>{{ form.produto }}</td>
+                    <td>{{ form.quantidade }}</td>
+                    <td>{{ form.valor_unitario }}</td>
+                    <td><input type="text" name="{{ form.prefix }}-valor_total" class="valor-total" readonly></td>
+                    <td><button type="button" class="remove-item">Remover</button></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <!-- Botão para adicionar uma nova linha de item -->
+        <button type="button" id="add-item">Adicionar Item</button>
+        <button type="submit">Salvar Venda</button>
+    </form>
+    
+<!-- Script contendo dados dos produtos no formato JSON, usado pelo JavaScript -->
+<script type="application/json" id="produto-data">
+    [{"id": 1, "nome": "Produto A"}, {"id": 2, "nome": "Produto B"}]
+</script>
+
+<!-- Inclusão do arquivo JavaScript que lida com a lógica da venda -->
+<script src="{% static 'js/venda.js' %}"></script>
+</body>
+{% endblock %}

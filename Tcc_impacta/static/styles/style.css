@@ -1,0 +1,610 @@
+/* static/css/styles.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+/* Estiliza o corpo da página */
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    /* background-image: url('https://source.unsplash.com/random/1920x1080'); */
+    background-image: url('https://img.freepik.com/vetores-gratis/plano-de-fundo-realista-em-estilo-futurista_23-2149129125.jpg?t=st=1724252941~exp=1724256541~hmac=71572ca6c3d5c6d572b0834bb4d587ce4003aa7a4325bde286ee09ac9c1df589&w=996');
+    background-size: cover;
+    background-position: center;
+    color: #39b3ef;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Estiliza a página inicial */
+.home-page {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    /* background-image: url('https://img.freepik.com/fotos-gratis/mulher-de-negocios-usando-um-tablet-para-analisar-o-conceito-de-sucesso-de-estatisticas-de-estrategia-de-financas-de-empresa-e-planejamento-para-o-futuro-na-sala-de-escritorio_74952-1410.jpg?w=1060&t=st=1724082952~exp=1724083552~hmac=57dc0406a523265c03d6da94f37e9878bcce683e9e00fe0fcaf2ea961ea7bf1f'); */
+    background: 
+        linear-gradient(
+            rgba(255, 255, 255, 0.5),
+            rgba(255, 255, 255, 0.5)
+        ),
+        url('https://img.freepik.com/fotos-gratis/mulher-de-negocios-usando-um-tablet-para-analisar-o-conceito-de-sucesso-de-estatisticas-de-estrategia-de-financas-de-empresa-e-planejamento-para-o-futuro-na-sala-de-escritorio_74952-1410.jpg?w=1060&t=st=1724082952~exp=1724083552~hmac=57dc0406a523265c03d6da94f37e9878bcce683e9e00fe0fcaf2ea961ea7bf1f');
+    background-size: cover;
+    background-position: center;
+    color: #39b3ef;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* TELA DE LOGIN */
+
+/* Estiliza o container do formulário de login */
+.login-container {
+    background-color: rgba(0, 51, 102, 0.6);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+/* Estiliza o formulário de login */
+.formLogin {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Estiliza o título do formulário de login */
+.formLogin h1 {
+    margin-bottom: 20px;
+    color: #fff;
+    font-weight: 600;
+}
+
+/* Estiliza os parágrafos do formulário de login */
+.formLogin p {
+    color: #ddd;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+/* Estiliza os rótulos (labels) do formulário de login */
+.formLogin label {
+    display: block;
+    text-align: left;
+    color: #fff;
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+/* Estiliza os campos de entrada (input) do formulário de login */
+.formLogin input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    outline: none;
+    transition: all 0.3s ease;
+    background-color: #f5f5f5;
+}
+
+/* Estiliza o campo de entrada ao receber foco */
+.formLogin input:focus {
+    border: 1px solid #f72585;
+    background-color: #fff;
+}
+
+/* Estiliza o botão de envio do formulário */
+.formLogin button {
+    background-color: #f72585;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Estiliza o botão ao passar o mouse sobre ele */
+.formLogin button:hover {
+    background-color: #ff0676;
+    transform: scale(1.05);
+}
+
+/* LINKS */
+
+/* Estiliza a seção de links adicionais */
+.links {
+    margin-top: 20px;
+}
+
+/* Estiliza os links adicionais */
+.links a {
+    color: #fff;
+    font-size: 14px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+/* Estiliza os links ao passar o mouse sobre eles */
+.links a:hover {
+    color: #ff0676;
+}
+
+/* POPUP */
+
+/* Estiliza o popup que será exibido na parte inferior direita da tela */
+.popup {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+/* Popup visível */
+.popup.show {
+    display: block;
+}
+
+/* Estiliza o container que agrupa os cards na página inicial */
+.container_home {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Espaçamento entre os cards */
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* HOME PAGE  */
+
+/* Estiliza cada card individual na página inicial */
+.card {
+    background-color: rgba(0, 51, 102, 0.8);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    transition: background-color 0.3s ease;
+    flex: 1 1 calc(33.333% - 20px);
+    box-sizing: border-box;
+}
+
+/* Estiliza o card ao passar o mouse sobre ele */
+.card:hover {
+    background-color: rgba(0, 51, 102, 0.8);
+    transform: scale(1.05);
+}
+
+/* Estiliza o título dentro de cada card */
+.card h2 {
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+/* Estiliza os links dentro de cada card */
+.card a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+/* Estiliza o link ao passar o mouse sobre ele */
+.card a:hover {
+    text-decoration: underline;
+}
+
+/* CABEÇALHO */
+
+/* Estilo do cabeçalho */
+header {
+    background-color: rgba(0, 51, 102, 0.8);
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+/* Estiliza o container do menu de navegação dentro do cabeçalho */
+header .nav-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+/* Estiliza o título dentro do cabeçalho */
+header h1 {
+    margin: 0;
+}
+
+/* Estiliza o menu de navegação dentro do cabeçalho */
+header nav {
+    margin-top: 10px;
+}
+
+/* Estiliza os links dentro do menu de navegação */
+header nav a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+/* Estiliza o link ao passar o mouse sobre ele */
+header nav a:hover {
+    text-decoration: underline;
+}
+
+/* RODAPÉ  */
+
+/* Estilo do rodapé */
+footer {
+    background-color: rgba(0, 51, 102, 0.8);
+    color: #fff;
+    text-align: center;
+    padding: 1px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+/* CADASTRO DE USUÁRIO  */
+
+/* Estilo do cadastro de usuario */
+.login-cadastro-container {
+    background-color: rgba(0, 51, 102, 0.6);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    max-width: 425px;
+    max-height: 450px;
+    width: 100%;
+    text-align: center;
+}
+
+/* Estiliza o formulário de cadastro/login */
+.formCadastroLogin {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Estiliza o título do formulário de cadastro/login */
+.formCadastroLogin h1 {
+    margin-bottom: 5px;
+    color: #fff;
+    font-weight: 600;
+}
+
+/* Estiliza os parágrafos dentro do formulário */
+.formCadastroLogin p {
+    color: #ddd;
+    font-size: 14px;
+    margin-bottom: 1px;
+}
+
+/* Estiliza os rótulos (labels) dentro do formulário */
+.formCadastroLogin label {
+    display: block;
+    text-align: left;
+    color: #fff;
+    font-weight: 600;
+    margin-bottom: 1px;
+    font-size: 14px;
+}
+
+/* Estiliza os campos de entrada (input) dentro do formulário */
+.formCadastroLogin input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    outline: none;
+    transition: all 0.3s ease;
+    background-color: #f5f5f5;
+}
+
+.formCadastroLogin input:focus {
+    border: 1px solid #f72585;
+    background-color: #fff;
+}
+
+.formCadastroLogin button {
+    background-color: #f72585;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 105%;
+}
+
+.formCadastroLogin button:hover {
+    background-color: #ff0676;
+    transform: scale(1.05);
+}
+
+/* CADASTRO DE CLIENTES  */
+
+/* Estilo do cadastro de clientes */
+.cadastro-cliente-container {
+    background-color: rgba(0, 51, 102, 0.6);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    max-width: 425px;
+    width: 100%;
+    text-align: center;
+}
+
+/* Estilos para o formulário de cadastro de clientes */
+.formCadastroCliente {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Estilo para o título do formulário */
+.formCadastroCliente h1 {
+    margin-bottom: 10px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 24px;
+}
+
+/* Estilo para o parágrafo dentro do formulário */
+.formCadastroCliente p {
+    color: #ddd;
+    font-size: 14px;
+    margin-bottom: 1px;
+}
+
+/* Estilo para os rótulos dos campos de entrada do formulário */
+.formCadastroCliente label {
+    display: block;
+    text-align: left;
+    color: #fff;
+    font-weight: 600;
+    margin-bottom: 1px;
+    font-size: 14px;
+}
+
+/* Estilo para os campos de entrada no formulário */
+.formCadastroCliente input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    outline: none;
+    transition: all 0.3s ease;
+    background-color: #f5f5f5;
+}
+
+/* Estilo para os campos de entrada ao receberem foco */
+.formCadastroCliente input:focus {
+    border: 1px solid #f72585;
+    background-color: #fff;
+}
+
+/* Estilo para o botão de envio do formulário */
+.formCadastroCliente button {
+    background-color: #f72585;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 15px 20px;
+    border: none;
+    border-radius: 5 px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 105%;
+}
+
+/* Estilo para o botão ao passar o mouse sobre ele */
+.formCadastroCliente button:hover {
+    background-color: #ff0676;
+    transform: scale(1.05);
+}
+
+/* LISTA DE CLIENTES  */
+
+/* Estilo geral para a lista de clientes */
+.lista-clientes-page {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: 
+        linear-gradient(
+            rgba(255, 255, 255, 0.8),
+            rgba(255, 255, 255, 0.8)
+        ),
+        url('https://img.freepik.com/fotos-gratis/executivos-do-aperto-de-mao-negocio-saudacao-no-trabalho_1150-865.jpg?t=st=1724091953~exp=1724095553~hmac=3eda1cb053ee298d90aa08b0fd1a6cd4053145af9d139031072e8f8900d7b603&w=996');
+    background-size: cover;
+    background-position: center;
+    color: #333;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+/* TABELAS */
+
+/* Estilo para a tabela de clientes */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto;
+    max-width: 1000px;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo para o cabeçalho da tabela */
+thead {
+    background-color: #39b3ef;
+    color: #fff;
+}
+
+/* Estilo para as células da tabela (cabeçalho e corpo) */
+th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Estilo para os títulos das colunas no cabeçalho */
+th {
+    font-weight: 600;
+}
+
+/* Estilo para linhas pares da tabela */
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Estilo para links ao passar o mouse sobre eles */
+.listar_clientes_a {
+    color: #39b3ef;
+    text-decoration: none;
+    padding: 8px;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.listar_clientes_a:hover {
+    background-color: #39b3ef;
+    color: #fff;
+}
+
+/* Estilo para links que funcionam como botões */
+.listar_clientes_a.button {
+    display: inline-block;
+    background-color: #39b3ef;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.listar_clientes_a.button:hover {
+    background-color: #328dc8;
+}
+
+/* VENDAS  */
+/* Estilo do cadastro de VENDAS */
+.cadastro-venda-container {
+    background-color: rgba(0, 51, 102, 0.6);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    margin: 0 auto;
+}
+
+/* Estilo para o formulário de cadastro de vendas */
+.formCadastroVenda {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Estilo para o título do formulário de vendas */
+.formCadastroVenda h1 {
+    margin-bottom: 20px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 1.2;
+}
+
+/* Estilo para os parágrafos dentro do formulário de vendas */
+.formCadastroVenda p {
+    color: #ddd;
+    font-size: 14px;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+/* Estilo para os rótulos dos campos de entrada no formulário de vendas */
+.formCadastroVenda label {
+    color: #fff;
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-size: 14px;
+    text-align: left;
+}
+
+/* Estilo para os campos de entrada no formulário de vendas */
+.formCadastroVenda input {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    outline: none;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+    background-color: #f5f5f5;
+}
+
+/* Estilo para os campos de entrada ao receberem foco */
+.formCadastroVenda input:focus {
+    border-color: #f72585;
+    background-color: #fff;
+}
+
+/* Estilo para o botão de envio do formulário de vendas */
+.formCadastroVenda button {
+    background-color: #f72585;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    width: 100%;
+}
+
+/* Estilo para o botão ao passar o mouse sobre ele */
+.formCadastroVenda button:hover {
+    background-color: #ff0676;
+    transform: scale(1.05);
+}
+
+/* Estilo para o botão ao ser clicado */
+.formCadastroVenda button:active {
+    transform: scale(1.02);
+}

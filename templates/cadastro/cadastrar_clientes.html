@@ -1,0 +1,29 @@
+<!-- Carregando paginas base e arquivos estaticos  -->
+{% extends 'shared/base.html' %}
+{% load static %}
+{% block content %}
+<title> Cadastro de clientes </title>
+<header>
+    <!-- Cabeçalho da página de cadastro de clientes -->
+    <h1>Cadastrar cliente</h1>
+    <nav class="nav-container">
+        <a href="{% url 'home' %}">Home</a> |
+    </nav>
+</header>
+<body>  
+    <!-- Container principal para o formulário de cadastro de cliente -->
+    <div class="cadastro-cliente-container">
+        <form method="post" class="formCadastroCliente">
+            <!-- Token CSRF para segurança em envios de formulário -->
+            {% csrf_token %}
+            <h1>Cadastro de clientes</h1>
+            <!-- Exibe o formulário de cadastro de cliente com seus campos -->
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success col-12" style="padding-top: 5px;">Cadastrar</button>
+        </form>
+    </div>
+    <!-- Div para mensagens de popup -->
+    <div id="popup" class="popup"></div>
+    {% include 'partials/_message.html' %}
+</body>
+{% endblock %}

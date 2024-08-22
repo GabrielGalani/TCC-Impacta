@@ -1,0 +1,44 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+{% block content %}
+<body class="lista-clientes-page">
+    <header>
+        <h1>Lista de produtos</h1>
+        <nav class="nav-container">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'cadastrar_produto' %}">Cadastrar novo produto</a>
+        </nav>
+    </header>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Preco</th>
+                <th>Estoque</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Loop para listar todos os produtos -->
+            {% for produto in produtos %}
+            <tr>
+                <td>{{ produto.id }}</td>
+                <td>{{ produto.nome }}</td>
+                <td>{{ produto.preco }}</td>
+                <td>{{ produto.estoque }}</td>
+                <td>
+                    <a href="{% url 'alterar_produto' produto.id %}">Alterar</a>
+                    <a href="{% url 'excluir_produto' produto.id %}">Excluir</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">Nenhum produto encontrado.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div id="popup" class="popup"></div>
+    {% include 'partials/_message.html' %}
+</body>
+{% endblock %}

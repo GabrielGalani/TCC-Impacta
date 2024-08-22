@@ -1,0 +1,24 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+{% block content %}
+<title> Cadastro de clientes </title>
+<header>
+    <h1>Cadastrar produto</h1>
+    <nav class="nav-container">
+        <a href="{% url 'home' %}">Home</a> |
+    </nav>
+</header>
+<body>  
+    <div class="cadastro-cliente-container">
+         <!-- Container para o formulário de cadastro de produtos -->
+        <form method="post" class="formCadastroCliente">
+            {% csrf_token %}
+            <h1>Cadastro de produtos</h1>
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success col-12" style="padding-top: 5px;">Cadastrar</button>
+        </form>
+    </div>
+    <div id="popup" class="popup"></div>
+    {% include 'partials/_message.html' %}
+</body>
+{% endblock %}
