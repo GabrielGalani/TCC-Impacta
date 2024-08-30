@@ -78,15 +78,16 @@ WSGI_APPLICATION = 'Tcc_impacta.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+#Alteração de banco de dados para teste
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+'default': {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': BASE_DIR / 'db.sqlite3',
+}
 }
 
 # ADICIONADO PARA USO SQL SERVER
-## DADOS DE CONEXÃO COM SEU SQL SERVER
+# DADOS DE CONEXÃO COM SEU SQL SERVER
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'mssql',
@@ -101,7 +102,6 @@ DATABASES = {
 #         },
 #     }
 # }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
