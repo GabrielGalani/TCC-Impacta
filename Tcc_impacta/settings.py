@@ -83,25 +83,25 @@ DATABASES = {
 'default': {
     'ENGINE': 'django.db.backends.sqlite3',
     'NAME': BASE_DIR / 'db.sqlite3',
-}
+    }
 }
 
 # ADICIONADO PARA USO SQL SERVER
 # DADOS DE CONEXÃO COM SEU SQL SERVER
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'mssql',
-#         'NAME': 'DW',
-#         'USER': '',
-#         'PASSWORD': '', 
-#         'HOST': 'GABGALANI',
-#         'PORT': '',
-#         'OPTIONS': {
-#             'driver': 'ODBC Driver 17 for SQL Server',
-#             'trusted_connection': 'yes',
-#         },
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'mssql',
+        'NAME': 'DW',
+        'USER': '',
+        'PASSWORD': '', 
+        'HOST': 'GABGALANI',
+        'PORT': '',
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',
+            'trusted_connection': 'yes',
+        },
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

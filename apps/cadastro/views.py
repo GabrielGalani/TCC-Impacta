@@ -57,8 +57,12 @@ def listar_clientes(request):
     if not request.user.is_authenticated:
         messages.error(request, "Usuário não logado")
         return redirect('login')
-    # clientes = Cliente.objects.all()
-    clientes = Cliente.objects.filter(ativo=True)
+    
+    if request.user.is_superuser:
+        clientes = Cliente.objects.all()
+    else:
+        clientes = Cliente.objects.filter(ativo=True)
+    
     return render(request, 'cadastro/listar_clientes.html', {'clientes': clientes})
 
 # Função para alterar os dados de um cliente
@@ -66,14 +70,23 @@ def alterar_cliente(request, cliente_id):
     if not request.user.is_authenticated:
         messages.error(request, "Usuário não logado")
         return redirect('login')
+
     cliente = get_object_or_404(Cliente, id=cliente_id)
+    
     if request.method == 'POST':
-        form = ClienteForm(request.POST, instance=cliente)
+        form = ClienteAlterForm(request.POST, instance=cliente, user=request.user)
         if form.is_valid():
             form.save()
-            return redirect('listar_clientes')  # Redireciona para a lista de clientes após a alteração
+            messages.success(request, 'Cliente atualizado com sucesso!')
+            return redirect('listar_clientes')
+        else:
+            messages.error(request, 'Por favor, corrija os erros abaixo.')
     else:
-        form = ClienteForm(instance=cliente)
+        form = ClienteAlterForm(instance=cliente, user=request.user)
+
+        if not cliente_id:
+            form = ClienteAlterForm(user=request.user)
+    
     return render(request, 'cadastro/alterar_cliente.html', {'form': form})
 
 ## PRODUTOS
