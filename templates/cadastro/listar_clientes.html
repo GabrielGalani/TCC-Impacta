@@ -18,6 +18,9 @@
                 <th>Nome</th>
                 <th>Email</th>
                 <th>Ações</th>
+                {% if user.is_superuser %}
+                    <th>Ativo</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -32,10 +35,13 @@
                     <a href="{% url 'alterar_cliente' cliente.id %}">Alterar</a>
                     <a href="{% url 'excluir_cliente' cliente.id %}">Excluir</a>
                 </td>
+                {% if user.is_superuser %}
+                    <td>{{ cliente.ativo|yesno:"Sim,Não" }}</td>
+                {% endif %}
             </tr>
             {% empty %}
             <tr>
-                <td colspan="4">Nenhum cliente encontrado.</td>
+                <td colspan="{% if user.is_superuser %}5{% else %}4{% endif %}">Nenhum cliente encontrado.</td>
             </tr>
             {% endfor %}
         </tbody>
