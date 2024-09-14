@@ -1,11 +1,10 @@
 from django.urls import path
-from .views import login, cadastro, logout
+from . import views
 
-# URLs para operações específicas de usuarios
-## Direito  http://localhost:8000/cadastro/
 urlpatterns = [
-    path('', login, name='login'),
-    path('cadastro/', cadastro, name='cadastro',),
-    path('logout/', logout, name='logout')
-    
+    path('login/', views.login, name='login'),
+    path('cadastro/', views.cadastro, name='cadastro'),
+    path('logout/', views.logout, name='logout'),
+    path('password-reset/', views.esqueci_a_senha, name='password_reset'),
+    # Adicione outras URLs conforme necessário
 ]

@@ -1,7 +1,7 @@
 from django import forms
 
 # Formulário para login de usuário
-class LoginFroms(forms.Form):
+class LoginForms(forms.Form):
     nome_login = forms.CharField(
         label="Nome de login",
         required=True,
@@ -28,7 +28,7 @@ class LoginFroms(forms.Form):
     )
 
 # Formulário de cadastro de usuario  
-class CadastroFroms(forms.Form):
+class Cadastro(forms.Form):
     nome_cadastro=forms.CharField(
         label="Nome de login",
         required=True,
