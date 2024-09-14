@@ -20,6 +20,8 @@
             {{ form.as_p }}
             <button type="submit" class="btn btn-success col-12" style="padding-top: 5px;">Entrar</button>
             <div class="links">
+                <a href="{% url 'password_reset' %}">Esqueci a senha</a>
+                <a href="{% url 'login' %}">Já tem uma conta? Faça login</a>
                 <a href="{% url 'cadastro' %}">Cadastrar Usuário</a> |
             </div>
         </form>
