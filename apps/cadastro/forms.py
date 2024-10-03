@@ -51,6 +51,30 @@ class ProdutoForm(forms.ModelForm):
         # Define os campos que serão incluídos no formulário
         fields = ['nome', 'preco', 'estoque']
 
+
+class ProdutoAlterForm(forms.ModelForm): 
+    class Meta:
+        model = Produto
+        # Campos do formulário
+        fields = ['nome', 'preco', 'estoque', 'ativo']
+        # Atributos de cada campo do formulário
+        widgets = {
+            'nome': forms.TextInput(attrs={'placeholder': 'Digite um nome válido'}),
+            'preco': forms.NumberInput(attrs={'step': '0.01'}),
+            'estoque': forms.NumberInput(attrs={'min': '0'}),
+            'ativo': forms.CheckboxInput(attrs={'class': 'form-check-input'})
+        }
+
+    # Verificando se o usuário logado é um administrador que poderá ativar um cliente excluido
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        if user and not user.is_superuser:
+            self.fields.pop('ativo')
+        else:
+            self.fields['ativo'].widget.attrs.update({'class': 'form-check-input'})
+
+
 # Formulário para o modelo Venda
 class VendaForm(forms.ModelForm):
     class Meta:
