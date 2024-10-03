@@ -122,11 +122,16 @@ def excluir_produto(request, produto_id):
 
 # Função para listar todos os produtos ativos (Usa o formulário)
 def listar_produto(request):
+
     if not request.user.is_authenticated:
         messages.error(request, "Usuário não logado")
         return redirect('login')
+    
     # clientes = Cliente.objects.all()
-    produtos = Produto.objects.filter(ativo=True)
+    if request.user.is_superuser:
+        produtos = Produto.objects.all()
+    else:
+        produtos = Produto.objects.filter(ativo=True)
     return render(request, 'produtos/listar_produtos.html', {'produtos': produtos})
 
 

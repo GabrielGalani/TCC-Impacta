@@ -16,6 +16,10 @@
                 <th>Nome</th>
                 <th>Preco</th>
                 <th>Estoque</th>
+                <th>Ações</th>
+                {% if user.is_superuser %}
+                    <th>Ativo</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -30,6 +34,9 @@
                     <a href="{% url 'alterar_produto' produto.id %}">Alterar</a>
                     <a href="{% url 'excluir_produto' produto.id %}">Excluir</a>
                 </td>
+                {% if user.is_superuser %}
+                    <td>{{ cliente.ativo|yesno:"Sim,Não" }}</td>
+                {% endif %}
             </tr>
             {% empty %}
             <tr>
