@@ -79,12 +79,12 @@ WSGI_APPLICATION = 'Tcc_impacta.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 #Alteração de banco de dados para teste
-DATABASES = {
-'default': {
-    'ENGINE': 'django.db.backends.sqlite3',
-    'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+# 'default': {
+#     'ENGINE': 'django.db.backends.sqlite3',
+#     'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 # ADICIONADO PARA USO SQL SERVER
 # DADOS DE CONEXÃO COM SEU SQL SERVER

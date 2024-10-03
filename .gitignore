@@ -11,6 +11,8 @@ db.sqlite3
 db.sqlite3-journal
 media
 Tcc_impacta/settings.py
+*settings*
+*manage*
 *settings.py
 settings*
 # If your build process includes running collectstatic, then you probably don't need or want to include staticfiles/

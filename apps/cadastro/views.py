@@ -129,20 +129,33 @@ def listar_produto(request):
     produtos = Produto.objects.filter(ativo=True)
     return render(request, 'produtos/listar_produtos.html', {'produtos': produtos})
 
+
 # Função para alterar os dados de um produto
 def alterar_produto(request, produto_id):
     if not request.user.is_authenticated:
         messages.error(request, "Usuário não logado")
         return redirect('login')
-    cliente = get_object_or_404(Produto, id=produto_id)
+    
+    produto = get_object_or_404(Produto, id=produto_id)
+
     if request.method == 'POST':
-        form = ProdutoForm(request.POST, instance=cliente)
+        form = ProdutoAlterForm(request.POST, instance=produto, user=request.user)
         if form.is_valid():
             form.save()
-            return redirect('listar_produtos')
+            messages.success(request, 'Produto atualizado com sucesso!')
+            return redirect('listar_produto')
+        else:
+            messages.error(request, 'Por favor, corrija os erros abaixo.')
     else:
-        form = ProdutoForm(instance=cliente)
+        form = ProdutoAlterForm(instance=produto, user=request.user)
+
+        if not produto_id:
+            form = ProdutoAlterForm(user=request.user)
+
     return render(request, 'produtos/alterar_produto.html', {'form': form})
+
+
+
 
 ## Vendas
 
