@@ -35,7 +35,7 @@
                     <a href="{% url 'excluir_produto' produto.id %}">Excluir</a>
                 </td>
                 {% if user.is_superuser %}
-                    <td>{{ cliente.ativo|yesno:"Sim,Não" }}</td>
+                    <td>{{ produto.ativo|yesno:"Sim,Não" }}</td>
                 {% endif %}
             </tr>
             {% empty %}

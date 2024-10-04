@@ -111,9 +111,7 @@ def excluir_produto(request, produto_id):
         messages.error(request, "Usuário não logado")
         return redirect('login')
     produto = get_object_or_404(Produto, id=produto_id)
-    # if request.method == 'POST':
-        # cliente.delete()
-    # return redirect('home')
+
     produto.ativo = False
     produto.save()
     return redirect('listar_produto')
