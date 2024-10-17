@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Cliente, Produto, Venda
+from .models import Cliente, Produto, Venda, NotaFiscal
 
 # Registro do modelo Cliente com a interface administrativa do Django
 @admin.register(Cliente)
@@ -24,6 +24,18 @@ class CadastroProdutoAdmin(admin.ModelAdmin):
     
     # Define quais campos serão usados como filtros na lista de registros
     list_filter = ('nome',)
+
+
+@admin.register(NotaFiscal)
+class CadastroNotaFIscalAdmin(admin.ModelAdmin):
+    # Define quais campos serão exibidos na lista de registros no painel admin
+    list_display = ('numero', 'data_emissao')
+    
+    # Define quais campos serão pesquisáveis no painel admin
+    search_fields = ('numero',)
+    
+    # Define quais campos serão usados como filtros na lista de registros
+    list_filter = ('numero','data_emissao')
 
 
 # Notas:

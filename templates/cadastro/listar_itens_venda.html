@@ -1,0 +1,45 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+{% block content %}
+<title>Itens da Venda</title>
+<header>
+    <h1>Itens da Venda</h1>
+    <nav class="nav-container">
+        <a href="{% url 'home' %}">Home</a> |
+        <a href="{% url 'listar_vendas' %}">Listar Vendas</a>
+    </nav>
+</header>
+<body>
+    <div class="listar-itens-container">
+        <h2>Itens da Venda</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Produto</th>
+                    <th>Preço</th>
+                    <th>Quantidade</th>
+                    <th>Valor Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in itens %}
+                <tr>
+                    <td>{{ item.cliente }}</td>
+                    <td>{{ item.produto }}</td>
+                    <td>R$ {{ item.preco }}</td>
+                    <td>{{ item.quantidade }}</td>
+                    <td>R$ {{ item.valor_total }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">Nenhum item encontrado para esta venda.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div id="popup" class="popup"></div>
+    {% include 'partials/_message.html' %}
+</body>
+{% endblock %}
