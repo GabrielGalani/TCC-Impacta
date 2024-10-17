@@ -54,6 +54,8 @@ class Venda(models.Model):
     data_venda = models.DateTimeField(auto_now_add=True)
     # Valor total da venda
     valor_total = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    # Define se uma venda é válida ou não
+    valida = models.BooleanField(default=True)
 
 # Modelo que representa um item em uma venda
 class ItemVenda(models.Model):
@@ -65,3 +67,14 @@ class ItemVenda(models.Model):
     quantidade = models.IntegerField()
     # Valor unitário do produto na venda
     valor_unitario = models.DecimalField(max_digits=10, decimal_places=2)
+
+
+class ExclusaoVenda(models.Model):
+    venda = models.ForeignKey('Venda', on_delete=models.CASCADE)
+    data_exclusao = models.DateTimeField(auto_now_add=True)
+    justificativa = models.TextField()
+    comentario = models.TextField(null=True, blank=True)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Exclusão da Venda {self.venda.id} por {self.usuario.username}"

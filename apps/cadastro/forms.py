@@ -1,8 +1,8 @@
 from django import forms
-from django.forms import inlineformset_factory
+from django.forms import inlineformset_factory, modelformset_factory
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
-from .models import Cliente, Produto, Venda, ItemVenda
+from .models import Cliente, Produto, Venda, ItemVenda, NotaFiscal
 import re 
 
 # Formulário para o modelo Cliente
@@ -79,26 +79,27 @@ class ProdutoAlterForm(forms.ModelForm):
 class VendaForm(forms.ModelForm):
     class Meta:
         model = Venda
-        # Define os campos que serão incluídos no formulário
+        # Remove o campo 'data_venda', pois não pode ser editado
         fields = ['cliente']
-    
+
     def __init__(self, *args, **kwargs):
-        # Chama o construtor da classe pai para inicializar o formulário
         super().__init__(*args, **kwargs)
-        # Define a queryset do campo 'cliente' para incluir todos os clientes
         self.fields['cliente'].queryset = Cliente.objects.all()
 
 # Formulário para o modelo ItemVenda
 class ItemVendaForm(forms.ModelForm):
     class Meta:
         model = ItemVenda
-        # Define os campos que serão incluídos no formulário
-        fields = ['produto', 'quantidade', 'valor_unitario']
-
+        fields = ['venda','produto', 'quantidade', 'valor_unitario']  # Remover valor_total
+        
 # Cria um formset para o modelo ItemVenda relacionado à Venda
 # Um formset é uma coleção de formulários do mesmo tipo
-ItemVendaFormSet = inlineformset_factory(Venda, ItemVenda, form=ItemVendaForm, extra=1)
+ItemVendaFormSet = modelformset_factory(ItemVenda, form=ItemVendaForm, extra=1)
 
+class NotaFiscalForm(forms.ModelForm):
+    class Meta:
+        model = NotaFiscal
+        fields = ['numero']
 #Notas
 ## É aqui onde devem ser criados os modelos de formulários tanto para alterações como para inclusões!
 ### Atualmente estão sendo usados os mesmos formulários para criar e alterar itens

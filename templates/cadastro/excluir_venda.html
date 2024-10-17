@@ -1,0 +1,34 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+{% block content %}
+<title> Excluir Venda </title>
+<header>
+    <h1>Excluir Venda</h1>
+</header>
+
+<body>
+    <div class="excluir-venda-container">
+        <h2>Confirmar Exclusão da Venda</h2>
+        
+        <div class="excluir-venda-info">
+            <label>ID:</label> <textarea class="text-area-valores">{{ venda.id }}</textarea><br>
+            <label>Data da Venda:</label> <textarea class="text-area-valores">{{ venda.data_venda|date:"D, d M Y H:i:s" }}</textarea><br>
+            <label>Valor Total:</label> <textarea class="text-area-valores">R$ {{ venda.valor_total }}</textarea>
+        </div>
+        
+        <form method="POST" action="{% url 'excluir_venda' venda.id %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="justificativa">Justificativa para a exclusão:</label>
+                <textarea class="form-control" id="justificativa" name="justificativa" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="comentario">Comentário (opcional):</label>
+                <textarea class="form-control" id="comentario" name="comentario"></textarea>
+            </div>
+            <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+            <a href="{% url 'listar_vendas' %}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</body>
+{% endblock %}

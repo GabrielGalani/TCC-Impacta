@@ -1,12 +1,13 @@
 {% extends 'shared/base.html' %}
 {% load static %}
 {% block content %}
-<title> Listar Vendas </title>
+<title>Listar Vendas</title>
 <header>
     <h1>Listar Vendas</h1>
     <nav class="nav-container">
         <a href="{% url 'home' %}">Home</a> |
-        <a href="{% url 'cadastrar_venda' %}">Cadastrar Venda</a> 
+        <a href="{% url 'cadastrar_venda' %}">Cadastrar Venda</a>
+    </nav>
 </header>
 <body>
     <div class="listar-vendas-container">
@@ -20,19 +21,37 @@
                     <th>Quantidade</th>
                     <th>Valor Total</th>
                     <th>Data da Venda</th>
-                    <th>Usuário</th>
+                    <th>Ações</th>
+                    {% if request.user.is_superuser %}
+                        <th>Venda Ativa</th> <!-- Mostra apenas se for superusuário -->
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
                 {% for venda in vendas %}
                 <tr>
                     <td>{{ venda.id }}</td>
-                    <td>{{ venda.cliente }}</td>
-                    <td>{{ venda.produto }}</td>
+                    <td>{{ venda.cliente_nome }}</td>
+                    <td><a href="{% url 'listar_itens_venda' venda.id %}">Ver Itens</a></td>
                     <td>{{ venda.quantidade }}</td>
                     <td>R$ {{ venda.valor_total }}</td>
                     <td>{{ venda.data_venda }}</td>
-                    <td>{{ venda.usuario }}</td>
+                    <td>
+                        {% if venda.valida %}
+                            <a href="{% url 'excluir_venda_form' venda.id %}" class="btn btn-danger">Excluir</a>
+                        {% else %}
+                            Venda já excluída
+                        {% endif %}
+                    </td>
+                    {% if request.user.is_superuser %}
+                        <td>
+                            {% if venda.valida %}
+                                Válida
+                            {% else %}
+                                Excluída
+                            {% endif %}
+                        </td>
+                    {% endif %}
                 </tr>
                 {% empty %}
                 <tr>

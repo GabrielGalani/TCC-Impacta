@@ -2,6 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import *
 
+
 # Cria uma instância do roteador padrão do Django REST Framework
 router = DefaultRouter()
 
@@ -31,8 +32,13 @@ urlpatterns = [
     # URLs para operações específicas de venda
     path('cadastrar_venda/', criar_venda, name='cadastrar_venda'),
     path('listar_venda/', listar_vendas, name='listar_vendas'),
+    path('venda/<int:venda_id>/itens/', listar_itens_venda, name='listar_itens_venda'),
+    path('venda/<int:venda_id>/excluir_form/', excluir_venda_form, name='excluir_venda_form'),
+    path('venda/<int:venda_id>/excluir/', excluir_venda, name='excluir_venda'),
+
 
     # URLs para operações de consulta de produto
-    path('get-produto-preco/<int:produto_id>/', get_produto_preco, name='get_produto_preco'),
     path('get-produtos/', get_produtos, name='get_produtos'),
+    path('get-produto-preco/<int:produto_id>/', get_produto_preco, name='get_produto_preco'),
+
 ]
