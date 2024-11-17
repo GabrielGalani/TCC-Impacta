@@ -41,4 +41,8 @@ urlpatterns = [
     path('get-produtos/', get_produtos, name='get_produtos'),
     path('get-produto-preco/<int:produto_id>/', get_produto_preco, name='get_produto_preco'),
 
+    # Gerar gráfico
+    path('relatorio-grafico/', relatorio_vendas, name='relatorio_grafico'),
+
+
 ]

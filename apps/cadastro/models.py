@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 # Modelo que representa um cliente
 class Cliente(models.Model):
@@ -51,7 +52,8 @@ class Venda(models.Model):
     # Referência à nota fiscal associada à venda
     nota_fiscal = models.ForeignKey(NotaFiscal, on_delete=models.CASCADE)
     # Data e hora da venda, preenchido automaticamente
-    data_venda = models.DateTimeField(auto_now_add=True)
+    # data_venda = models.DateTimeField(auto_now_add=True)
+    data_venda = models.DateTimeField(default=timezone.now)
     # Valor total da venda
     valor_total = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     # Define se uma venda é válida ou não

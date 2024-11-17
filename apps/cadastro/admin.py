@@ -37,6 +37,15 @@ class CadastroNotaFIscalAdmin(admin.ModelAdmin):
     # Define quais campos serão usados como filtros na lista de registros
     list_filter = ('numero','data_emissao')
 
+@admin.register(Venda)
+class CadastroVendaAdmin(admin.ModelAdmin):
+    list_display = ('usuario', 'cliente', 'nota_fiscal', 'data_venda', 'valida')
+
+    search_fields = ('cliente__nome', 'usuario__username', 'nota_fiscal', 'data_venda')
+
+    fields = ('usuario', 'cliente', 'nota_fiscal', 'data_venda', 'valida')
+
+    list_filter = ('data_venda', 'usuario', 'cliente')
 
 # Notas:
 ## É aqui onde trazemos os modelos para aparecer no painel administrativo do django http://localhost:8000/admin

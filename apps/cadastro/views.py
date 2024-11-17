@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.models import User
 from django.db import connection
 from django.contrib import messages
 from rest_framework import viewsets
@@ -8,8 +9,19 @@ from .forms import *
 from django.http import JsonResponse
 from django.db import transaction
 import uuid
+import matplotlib.pyplot as plt
+import io
+import base64
+import json
+import pandas as pd
+import plotly.graph_objects as go
+import plotly.express as px
+from django.db.models import Count, Sum
+from decimal import Decimal
+from django.db.models.functions import TruncMonth
+import locale   
 
-
+locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 # ViewSet para o modelo Cliente
 class ClienteViewSet(viewsets.ModelViewSet):
     queryset = Cliente.objects.all()  # Define a consulta para obter todos os clientes
@@ -420,75 +432,484 @@ def excluir_venda(request, venda_id):
     return redirect('listar_vendas')
 
 
-#Backup
-# def criar_venda(request):
-#     if not request.user.is_authenticated:
-#         messages.error(request, "Usuário não logado")
-#         return redirect('login')
 
-#     if request.method == "POST":
-#         form = VendaForm(request.POST)
-#         formset = ItemVendaFormSet(request.POST)
+# RELATÓRIO 
+def gerar_grafico(vendas, tipo_grafico):
+    if tipo_grafico == 'quantidade_por_cliente':
+        vendas_ativas = vendas.filter(valida=True)
+        # Agrega as vendas por cliente e conta a quantidade de vendas, ordenando de forma decrescente
+        clientes = vendas_ativas.values('cliente__nome').annotate(quantidade=Count('id'))
 
-#         if form.is_valid() and formset.is_valid():
-#             with transaction.atomic():
-#                 nota_fiscal = NotaFiscal.objects.create(
-#                     numero=str(uuid.uuid4())[:8]  # Gera um número único para a nota
-#                 )
-#                 venda = form.save(commit=False)
-#                 venda.usuario = request.user
-#                 venda.nota_fiscal = nota_fiscal
-#                 venda.save()
+        # Extrai os dados para os gráficos
+        nomes_clientes = [cliente['cliente__nome'] for cliente in clientes]
+        quantidade_vendas = [cliente['quantidade'] for cliente in clientes]
 
-#                 total_venda = 0
-#                 for form in formset:
-#                     item = form.save(commit=False)
-#                     item.venda = venda
-#                     item.valor_unitario = item.produto.preco
-#                     item.save()
-#                     total_venda += item.quantidade * item.valor_unitario
-                
-#                 venda.valor_total = total_venda
-#                 venda.save()
+        cores = px.colors.qualitative.Set1
+        if len(nomes_clientes) > len(cores):
+            cores = px.colors.qualitative.Set2
 
-#             messages.success(request, 'Venda cadastrada com sucesso!')
-#             return redirect('listar_vendas')
-#     else:
-#         form = VendaForm()
-#         formset = ItemVendaFormSet()
+        cores = cores[:len(nomes_clientes)]
 
-#     return render(request, 'cadastro/criar_venda.html', {'form': form, 'formset': formset})
+        # Gráfico de barras
+        fig = go.Figure([go.Bar(
+            x=quantidade_vendas,
+            y=nomes_clientes,
+            
+            marker_color=cores,
+            text=quantidade_vendas,
+            textposition='auto',
+            orientation='h'
+        )])
+
+        fig.update_layout(
+            title={
+                'text': 'Quantidade de Vendas por Cliente',
+                'x': 0.5,
+                'xanchor': 'center',
+                'y': 0.98,
+                'font': {
+                    'size': 24,
+                    'family': 'Arial, sans-serif',
+                    'color': 'white'
+                }
+            },
+            plot_bgcolor='rgba(0, 0, 0, 0.0)', 
+            paper_bgcolor='rgba(0, 0, 128, 0.8)',
+
+            xaxis=dict(
+                tickfont=dict(
+                    size=12,
+                    color='white'
+                ),
+            range=[0, max(quantidade_vendas) + 1],
+            showgrid=True,
+            gridwidth=1, 
+            gridcolor='#2f2f2f',
+            dtick=1,
+            ),
+            
+            yaxis=dict(
+                tickmode='linear',
+                tickangle=-45,
+                dtick=1,
+                showgrid=False,
+                gridcolor='rgba(255, 255, 255)',
+                tickfont=dict(
+                    size=12,
+                    color='white'
+                ),
+                title=dict(
+                    text='Clientes',
+                    font=dict(
+                        size=14,
+                        color='white'
+                    )
+                ),
+                # range=[0, max(quantidade_vendas) + 1]
+            ),
+            autosize=True,
+            margin=dict(l=40, r=40, t=40, b=40)
+        )
+    
+
+    elif tipo_grafico == 'valor_por_cliente':
+        vendas_ativas = vendas.filter(valida=True)
+        clientes_agregados = vendas_ativas.values('cliente__nome').annotate(total_vendas=Sum('valor_total'))
+
+        # Extraindo os dados para o gráfico
+        nomes_clientes = [cliente['cliente__nome'] for cliente in clientes_agregados]
+        valores_vendas = [cliente['total_vendas'] for cliente in clientes_agregados]
+
+        # Formatar os valores para exibição em formato monetário
+        valores_vendas_formatados = [locale.currency(valor, grouping=True) for valor in valores_vendas]
+
+        maior_valor = max(valores_vendas)
+        margem_extra = maior_valor * Decimal(0.1)
+
+        cores = px.colors.qualitative.Set1
+        if len(nomes_clientes) > len(cores):
+            cores = px.colors.qualitative.Set2
+
+        cores = cores[:len(nomes_clientes)]
+
+        # Gráfico de barras
+        fig = go.Figure([go.Bar(
+            x=valores_vendas,
+            y=nomes_clientes,
+            marker_color=cores,
+            text=valores_vendas_formatados,
+            textposition='auto',
+            orientation='h'
+        )])
+
+        fig.update_layout(
+            title={
+                'text': 'Valor vendido por clientes',
+                'x': 0.5,
+                'xanchor': 'center',
+                'y': 0.98,
+                'font': {
+                    'size': 24,
+                    'family': 'Arial, sans-serif',
+                    'color': 'white'
+                }
+            },
+            plot_bgcolor='rgba(0, 0, 0, 0.0)', 
+            paper_bgcolor='rgba(0, 0, 128, 0.8)',
+
+            yaxis=dict(
+                tickmode='linear',
+                tickangle=-45,
+                dtick=1,
+                showgrid=False,
+                gridcolor='rgba(255, 255, 255)',
+                tickfont=dict(
+                    size=12,
+                    color='white'
+                ),
+                title=dict(
+                    text='Clientes',
+                    font=dict(
+                        size=14,
+                        color='white'
+                    )
+                ),
+            ),
+
+            xaxis=dict(
+                tickfont=dict(
+                    size=12,
+                    color='white'
+                ),
+                title=dict(
+                    text='Valor vendido',
+                    font=dict(
+                        size=12,
+                        color='white'
+                    )
+                ),
+                showgrid=True,
+                gridwidth=1, 
+                gridcolor='#2f2f2f',
+                range=[0, maior_valor + margem_extra]
+            ),            
+
+            autosize=True,
+            margin=dict(l=40, r=40, t=40, b=40)
+        )
+
+
+    elif tipo_grafico == 'vendas_por_usuario':
+        vendas_ativas = vendas.filter(valida=True)
+        # Agrupar as vendas por vendedor (usuário) e contar a quantidade de vendas por usuário
+        vendedores_agregados = vendas_ativas.values('usuario__username').annotate(quantidade_vendas=Count('id'))
+
+        # Extrair os dados para o gráfico
+        vendedores = [vendedor['usuario__username'] for vendedor in vendedores_agregados]
+        quantidade = [vendedor['quantidade_vendas'] for vendedor in vendedores_agregados]
+
+
+        maior_valor = max(quantidade)
+        margem_extra = maior_valor * Decimal(0.5)
+
+        cores = px.colors.qualitative.Set1
+        if len(vendedores) > len(cores):
+            cores = px.colors.qualitative.Set2
+
+        cores = cores[:len(vendedores)]
+
+        # Gráfico de barras
+        fig = go.Figure([go.Bar(
+            x=quantidade,
+            y=vendedores,
+            
+            marker_color=cores,
+            text=quantidade,
+            textposition='auto',
+            orientation='h'
+        )])
+
+
+        fig.update_layout(
+            title={
+                'text': 'Quantidade de vendas por vendedores',
+                'x': 0.5,
+                'xanchor': 'center',
+                'y': 0.98,
+                'font': {
+                    'size': 24,
+                    'family': 'Arial, sans-serif',
+                    'color': 'white'
+                }
+            },
+            plot_bgcolor='rgba(0, 0, 0, 0.0)', 
+            paper_bgcolor='rgba(0, 0, 128, 0.8)',
+
+            yaxis=dict(
+                tickmode='linear',
+                tickangle=-45,
+                dtick=1,
+                showgrid=False,
+                gridcolor='rgba(255, 255, 255)',
+                tickfont=dict(
+                    size=12,
+                    color='white'
+                ),
+                title=dict(
+                    text='Clientes',
+                    font=dict(
+                        size=14,
+                        color='white'
+                    )
+                ),
+            ),
+
+            xaxis=dict(
+                tickfont=dict(
+                    size=12,
+                    color='white'
+                ),
+                title=dict(
+                    text='Quantidade de vendas',
+                    font=dict(
+                        size=14,
+                        color='white'
+                    )   
+                ),
+                showgrid=True,
+                gridwidth=1, 
+                gridcolor='#2f2f2f',
+                range=[0, maior_valor + margem_extra]
+            ),            
+
+            autosize=True,
+            margin=dict(l=40, r=40, t=40, b=40)
+        )
 
 
 
-        # # Obter os produtos e quantidades
-        # produtos_venda = request.POST.getlist('form-0-produto')
-        # quantidade_produtos = request.POST.getlist('form-0-quantidade')
-        # valor_unitario = request.POST.getlist('form-0-valor_unitario')
+    elif tipo_grafico == 'quantidade_mes':
+        vendas_ativas = vendas.filter(valida=True)
+        # Agrupar as vendas por mês e contar a quantidade de vendas por mês
+        vendas_por_mes = vendas_ativas.annotate(mes=TruncMonth('data_venda')).values('mes').annotate(quantidade=Count('id')).order_by('mes')
+
+        # Extrair os dados para o gráfico
+        meses = [venda['mes'].strftime('%B %Y') for venda in vendas_por_mes]
+        quantidade = [venda['quantidade'] for venda in vendas_por_mes]
+
+        # Gráfico de linha
+        fig = go.Figure()
+
+        # Adiciona a linha de tendência
+        fig.add_trace(go.Scatter(
+            x=meses,
+            y=quantidade,
+            mode='lines+markers',
+            line=dict(color='royalblue', width=3),
+            marker=dict(color='Blue', size=8, line=dict(color='white', width=2)),
+            name='Tendência de Vendas',
+        ))
+
+        # Adiciona a barra no fundo (barras horizontais)
+        fig.add_trace(go.Bar(
+            x=meses,
+            y=quantidade,
+            marker_color='rgba(50, 0, 300)',
+            name='Vendas por Mês',
+            opacity=0.6,
+        ))
+
+        # Atualiza o layout do gráfico
+        fig.update_layout(
+            title={
+                'text': 'Quantidade de Vendas ao Longo do Tempo (Mes a Mes)',
+                'x': 0.5,
+                'xanchor': 'center',
+                'y': 0.95,
+                'font': {
+                    'size': 24,
+                    'family': 'Arial, sans-serif',
+                    'color': 'white'
+                }
+            },
+            plot_bgcolor='rgba(0, 0, 0, 0.0)',
+            paper_bgcolor='rgba(0, 0, 128, 0.8)',
+            xaxis=dict(
+                tickangle=-45,
+                tickfont=dict(
+                    size=12,
+                    color='white'
+                ),
+                showgrid=False,
+            ),
+            yaxis=dict(
+                tickmode='linear',
+                dtick=1,
+                showgrid=True,
+                gridcolor='rgba(255, 255, 255)',
+                tickfont=dict(
+                    size=12,
+                    color='white'
+                ),
+                title=dict(
+                    text='Quantidade de Vendas',
+                    font=dict(
+                        size=14,
+                        color='white'
+                    )
+                ),
+                range=[0, max(quantidade) + 1]
+            ),
+            autosize=True,
+            margin=dict(l=40, r=40, t=40, b=40),
+            barmode='stack',
+            legend=dict(
+                font=dict(
+                    size=12,
+                    color='white'
+                ),
+                x=0.01,
+                y=0.99,
+                traceorder='normal',
+            ),
+        )
+
+    elif tipo_grafico == 'valor_mes':
+        vendas_ativas = vendas.filter(valida=True)
+        # Agrupar as vendas por mês e calcular o valor total por mês
+        vendas_por_mes = vendas_ativas.annotate(mes=TruncMonth('data_venda')).values('mes').annotate(valor_total=Sum('valor_total')).order_by('mes')
+
+        # Extrair os dados para o gráfico
+        meses = [venda['mes'].strftime('%B %Y') for venda in vendas_por_mes]
+        valores = [venda['valor_total'] for venda in vendas_por_mes]
+
+        # Formatar os valores para exibição em formato monetário
+        valores_formatados = [locale.currency(valor, grouping=True) for valor in valores]
+
+        fig = go.Figure()
+
+        # Adiciona a barra de vendas por mês
+        fig.add_trace(go.Bar(
+            x=meses,
+            y=valores,
+            marker_color='rgba(50, 0, 300)',
+            name='Valor de Vendas por Mês',
+            opacity=0.6,
+            text=valores_formatados, 
+            textposition='inside',
+            insidetextanchor='middle',
+            textfont=dict(
+                size=12,
+                color='white'
+            )
+        ))
+
+        # Adiciona a linha de tendência
+        fig.add_trace(go.Scatter(
+            x=meses,
+            y=valores,
+            mode='lines+markers',
+            line=dict(color='red', width=3),
+            marker=dict(color='orange', size=8, line=dict(color='white', width=2)),
+            name='Tendência de Vendas',
+            text=valores_formatados,
+            textposition='top center',
+        ))
+
+        fig.update_layout(
+            title={
+                'text': 'Valor de Vendas ao Longo do Tempo (Mes a Mes)',
+                'x': 0.5,
+                'xanchor': 'center',
+                'y': 0.95,
+                'font': {
+                    'size': 24,
+                    'family': 'Arial, sans-serif',
+                    'color': 'white'
+                }
+            },
+            plot_bgcolor='rgba(0, 0, 0, 0.0)',
+            paper_bgcolor='rgba(0, 0, 128, 0.8)',
+            xaxis=dict(
+                tickangle=-45,
+                tickfont=dict(
+                    size=12,
+                    color='white'
+                ),
+                showgrid=False,
+            ),
+            yaxis=dict(
+                tickmode='linear',
+                dtick=5000,
+                showgrid=True,
+                gridcolor='rgba(255, 255, 255)',
+                tickfont=dict(
+                    size=12,
+                    color='white'
+                ),
+                title=dict(
+                    text='Valor Total (R$)',
+                    font=dict(
+                        size=14,
+                        color='white'
+                    )
+                ),
+                range=[0, max(valores) + 1000]
+            ),
+            autosize=True,
+            margin=dict(l=40, r=40, t=40, b=40),
+            barmode='group',
+            legend=dict(
+                font=dict(
+                    size=12,
+                    color='white'
+                ),
+                x=0.01,
+                y=0.99,
+                traceorder='normal',
+            ),
+        )
 
 
-        # # Iterar sobre os produtos e suas quantidades
-        # for i in range(len(produtos_venda)):
-        #     print(f'Nota fiscal: {nota_fiscal} - '
-        #           f'Cliente id: {cliente} - '
-        #           f'valor_total_venda: {valor_total_venda} - '
-        #           f'produtos_venda: {produtos_venda[i]} - '
-        #           f'quantidade_produtos: {quantidade_produtos[i]} - '
-        #           f'valor_unitario: {valor_unitario[i]} -'
-        #           f'Valor_total_venda: {valor_total_venda}')
+    fig.update_layout(
+        width=1200,
+        height=600,
+    autosize=True,
+    margin=dict(l=40, r=40, t=40, b=40)
+)
+    
+    # Converte o gráfico para base64 para exibição no template
+    graph_html = fig.to_html(full_html=False)
 
-        #     # Salvar no model ItemVenda
-        #     item_venda_nota = nota_fiscal
-        #     item_venda_produto = produtos_venda[i]
-        #     item_venda_quantidade = quantidade_produtos[i]
-        #     item_venda_valor_unitario = valor_unitario[i]
+    return graph_html
 
-        
-        # # Salvar no Model Notas Fiscais
-        # nota_fical_numero = nota_fiscal
+def relatorio_vendas(request):
 
-        # # Salvar no model Venda
-        # venda_usuario = request.user # Tem que coletar o usuario logado
-        # venda_cliente = cliente
-        # venda_nota_fiscal = nota_fiscal
-        # venda_valor_total = valor_total_venda
+    if not request.user.is_authenticated:
+        messages.error(request, "Usuário não logado")
+        return redirect('login')
+    
+    cliente_id = request.GET.get('cliente')
+    vendedor_id = request.GET.get('usuario')
+    tipo_grafico = request.GET.get('tipo_grafico', 'quantidade_por_cliente')
+
+    # Filtro de vendas com base nos parâmetros recebidos
+    vendas = Venda.objects.all()
+    if cliente_id and cliente_id != 'todos':
+        vendas = vendas.filter(cliente__id=cliente_id)
+    if vendedor_id and vendedor_id != 'todos':
+        vendas = vendas.filter(usuario__id=vendedor_id)
+
+    # Gera o gráfico e passa para o template
+    grafico = gerar_grafico(vendas, tipo_grafico)
+    clientes = Cliente.objects.all()
+    vendedores = User.objects.all()
+
+    context = {
+        'grafico': grafico,
+        'clientes': clientes,
+        'vendedores': vendedores,
+        'tipo_grafico': tipo_grafico,
+    }
+
+    return render(request, 'cadastro/relatorio_grafico.html', context)

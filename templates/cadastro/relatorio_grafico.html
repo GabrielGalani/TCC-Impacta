@@ -1,0 +1,64 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+<title>Relatório Gráfico de Vendas</title>
+
+<header>
+    <h1>Relatório Gráfico de Vendas</h1>
+    <nav class="nav-container">
+        <a href="{% url 'home' %}">Home</a> |
+        <a href="{% url 'relatorio_grafico' %}">Relatório Gráfico</a>
+    </nav>
+</header>
+
+<body>
+    <div class="relatorio-container">
+        <div class="filters">
+            <form method="get" class="filters-form" style="display: flex; gap: 20px;">
+                <div class="filter-group">
+                    <label for="cliente">Cliente:</label>
+                    <select name="cliente" id="cliente">
+                        <option value="todos">Todos</option>
+                        {% for cliente in clientes %}
+                        <option value="{{ cliente.id }}" {% if cliente.id|stringformat:"s" == request.GET.cliente %}selected{% endif %}>
+                            {{ cliente.nome }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="usuario">Vendedor:</label>
+                    <select name="usuario" id="usuario">
+                        <option value="todos">Todos</option>
+                        {% for vendedor in vendedores %}
+                        <option value="{{ vendedor.id }}" {% if vendedor.id|stringformat:"s" == request.GET.usuario %}selected{% endif %}>
+                            {{ vendedor.username }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="tipo_grafico">Tipo de Gráfico:</label>
+                    <select name="tipo_grafico" id="tipo_grafico">
+                        <option value="quantidade_por_cliente" {% if tipo_grafico == 'quantidade_por_cliente' %}selected{% endif %}>Quantidade de Vendas por Cliente</option>
+                        <option value="valor_por_cliente" {% if tipo_grafico == 'valor_por_cliente' %}selected{% endif %}>Valor de Vendas por Cliente</option>
+                        <option value="vendas_por_usuario" {% if tipo_grafico == 'vendas_por_usuario' %}selected{% endif %}>Vendas por Vendedor</option>
+                        <option value="quantidade_mes" {% if tipo_grafico == 'quantidade_mes' %}selected{% endif %}>Quantidade de Vendas ao Longo do Tempo</option>
+                        <option value="valor_mes" {% if tipo_grafico == 'valor_mes' %}selected{% endif %}>Valor de Vendas ao Longo do Tempo</option>
+                    </select>
+                </div>
+            
+                <button type="submit" class="btn-gerar-relatorio">Gerar Relatório</button>
+            </form>
+        </div>
+
+        <div class="relatorio-grafico">
+            <h2></h2>
+            <div>{{ grafico|safe }}</div>
+        </div>
+    </div>
+</body>
+
+{% endblock %}

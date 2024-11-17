@@ -738,3 +738,53 @@ button.btn-danger:hover {
     border: 1px solid #f72585;
     background-color: #fff;
 }
+
+
+
+
+
+/* relatório */
+.relatorio-container {
+    position: relative;
+    padding-top: 20px;
+}
+
+.filters {
+    padding: 20px;
+    background: transparent;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;  /* Permite que os filtros se ajustem à largura */
+    z-index: 10;
+}
+
+.filter-group {
+    display: flex;  /* Alterado de 'flex-direction: column' para 'flex' */
+    flex-direction: row;  /* Alinha os elementos horizontalmente */
+    align-items: center;  /* Alinha os itens verticalmente no centro */
+    gap: 10px;  /* Espaçamento entre o label e o select */
+}
+
+.filter-group label {
+    margin-right: 5px;  /* Adiciona um pequeno espaço entre o label e o select */
+}
+
+.relatorio-grafico {
+    padding-top: 0px;
+    width: 100%;
+}
+
+.btn-gerar-relatorio {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Estilo de hover (quando o mouse passa sobre o botão) */
+.btn-gerar-relatorio:hover {
+    background-color: #0056b3;
+}
